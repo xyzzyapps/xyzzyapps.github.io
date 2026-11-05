@@ -19,11 +19,22 @@ CUSTOM_DESCRIPTIONS = {
     "diver": "Minimalist Single File Component (SFC) compiler and static site generator for Node.js using native ES Modules.",
 }
 
-# Explicit demo URLs
-EXTRA_DEMOS = {
-    "ping-pong": "https://xyzzyapps.github.io/ping-pong/",
-    "endless_dub": "https://xyzzyapps.github.io/endless_dub/",
+# Verified active GitHub Pages hosted at https://xyzzyapps.github.io/<reponame>/
+GITHUB_PAGES = {
+    "otto": "https://xyzzyapps.github.io/otto/",
+    "tick": "https://xyzzyapps.github.io/tick/",
+    "preforth": "https://xyzzyapps.github.io/preforth/",
+    "doge-world": "https://xyzzyapps.github.io/doge-world/",
+    "batminton": "https://xyzzyapps.github.io/batminton/",
+    "raptor": "https://xyzzyapps.github.io/raptor/",
     "spear": "https://xyzzyapps.github.io/spear/",
+    "useless-box": "https://xyzzyapps.github.io/useless-box/",
+    "endless_dub": "https://xyzzyapps.github.io/endless_dub/",
+    "ping-pong": "https://xyzzyapps.github.io/ping-pong/",
+    "arli": "https://xyzzyapps.github.io/arli/",
+    "goweb": "https://xyzzyapps.github.io/goweb/",
+    "docco-md": "https://xyzzyapps.github.io/docco-md/",
+    "diver": "https://xyzzyapps.github.io/diver/",
 }
 
 CATEGORIES = {
@@ -31,37 +42,43 @@ CATEGORIES = {
         "id": "compilers",
         "name": "Languages & Compilers",
         "icon": "⚡",
-        "desc": "Novel programming languages, transpilers, bytecode VMs, and radical syntax experiments."
+        "desc": "Radical programming languages, prefix concatenative Lisps, transpilers, bytecode VMs, and zero-filler syntax experiments.",
+        "order": 1
     },
     "literate": {
         "id": "literate",
-        "name": "Literate & Prose Code",
+        "name": "Literate & Conversational Code",
         "icon": "📖",
-        "desc": "Literate programming, prose-to-code translation, English DSLs, and source weaving."
+        "desc": "Literate programming tools, prose-to-code translation, English DSLs, and topologic explain-order compilation.",
+        "order": 2
     },
     "systems": {
         "id": "systems",
-        "name": "Systems & DevTools",
+        "name": "Systems, Low-Level & DevTools",
         "icon": "🛠️",
-        "desc": "Assembly macros, C/C++ static analyzers, version control, and unconventional text editors."
+        "desc": "Readable NASM assembly macros, C static analyzers, hygienic macro expanders, and unconventional source editors.",
+        "order": 3
     },
     "audio_video": {
         "id": "audio_video",
         "name": "Audio & Creative Tech",
         "icon": "🎵",
-        "desc": "Algorithmic techno, DAW MIDI inference engines, video REPLs, and GPU shaders."
+        "desc": "Real-time DAW MIDI inference engines, algorithmic hardgroove techno, headless Pure Data DSP, and video REPLs.",
+        "order": 4
     },
     "sim_games": {
         "id": "sim_games",
-        "name": "Simulations & Games",
+        "name": "Simulations, AI & Games",
         "icon": "🕹️",
-        "desc": "Desktop virtual creatures, insect neuro-simulations, 3D shaders, and retro games."
+        "desc": "Live desktop arthropods, insect neuro-simulations, reinforcement learning agents writing haiku, and custom 3D shaders.",
+        "order": 5
     },
     "web_runtime": {
         "id": "web_runtime",
-        "name": "Web & Runtimes",
+        "name": "Web & Novel Runtimes",
         "icon": "🌐",
-        "desc": "Dynamic runtimes, CGI servers, single-file component compilers, and mobile TUIs."
+        "desc": "Go executing like PHP with Fiber templating, native ESM Single File Component compilers, and mobile TUI ports.",
+        "order": 6
     }
 }
 
@@ -156,14 +173,12 @@ REPO_CATEGORY_MAP = {
     "cordis": "web_runtime",
 }
 
-# Tag generation helper
 def generate_tags(repo, category):
     tags = []
     lang = repo.get("primaryLanguage")
     if lang:
         tags.append(lang["name"])
     
-    name_lower = repo["name"].lower()
     desc_lower = (repo.get("description") or "").lower()
 
     if "compiler" in desc_lower or "transpiler" in desc_lower or category == "compilers":
@@ -183,26 +198,23 @@ def generate_tags(repo, category):
     if repo.get("stargazerCount", 0) > 0:
         tags.append("popular")
     
-    # deduplicate preserving order
     seen = set()
     return [t for t in tags if not (t in seen or seen.add(t))][:4]
 
 processed_repos = []
-unmapped = []
 
 for r in raw_repos:
     name = r["name"]
-    cat = REPO_CATEGORY_MAP.get(name)
-    if not cat:
-        unmapped.append(name)
-        cat = "systems"
+    cat = REPO_CATEGORY_MAP.get(name, "systems")
 
     desc = r.get("description") or CUSTOM_DESCRIPTIONS.get(name) or "An experimental project by Xyzzy Apps."
-    demo = r.get("homepageUrl") or EXTRA_DEMOS.get(name) or ""
-    if demo.startswith("https://xyzzyapps.github.io/"):
-        has_pages = True
-    else:
-        has_pages = False
+    
+    # Check if this repo has a GitHub Page
+    gh_page_url = GITHUB_PAGES.get(name)
+    has_github_page = gh_page_url is not None
+    
+    # External homepage or fallback to gh_page_url
+    demo = gh_page_url or r.get("homepageUrl") or ""
 
     lang = r.get("primaryLanguage")
     lang_name = lang["name"] if lang else "Other"
@@ -215,21 +227,19 @@ for r in raw_repos:
         "stars": r.get("stargazerCount", 0),
         "url": r["url"],
         "homepage": demo,
+        "githubPage": gh_page_url,
+        "hasGithubPage": has_github_page,
         "isFork": r.get("isFork", False),
         "isArchived": r.get("isArchived", False),
         "createdAt": r.get("createdAt"),
         "updatedAt": r.get("updatedAt"),
         "tags": generate_tags(r, cat),
         "featured": name in [
-            "otto", "tick", "rasm", "Jbd", "raptor", "fftechno", 
-            "doge-world", "arli", "goweb", "weft", "tangly", "endless_dub"
+            "otto", "tick", "preforth", "rasm", "Jbd", "raptor", "fftechno", 
+            "doge-world", "arli", "goweb", "weft", "tangly", "endless_dub", "diver"
         ]
     }
     processed_repos.append(processed)
-
-print(f"Processed {len(processed_repos)} repos.")
-if unmapped:
-    print(f"Warning: unmapped repos: {unmapped}")
 
 output_data = {
     "user": {
@@ -240,13 +250,14 @@ output_data = {
         "github": "https://github.com/xyzzyapps",
         "twitter": "https://twitter.com/xyzzyapps",
         "blog": "https://xyzzyapps.link",
-        "repoCount": len(processed_repos)
+        "repoCount": len(processed_repos),
+        "pagesCount": len(GITHUB_PAGES)
     },
     "categories": CATEGORIES,
     "repos": processed_repos
 }
 
-with open("site_data.json", "w", encoding="utf-8") as f:
+with open("projects.json", "w", encoding="utf-8") as f:
     json.dump(output_data, f, indent=2, ensure_ascii=False)
 
-print("Saved to site_data.json successfully!")
+print(f"Generated projects.json: {len(processed_repos)} repos, {len(GITHUB_PAGES)} active GitHub Pages.")
