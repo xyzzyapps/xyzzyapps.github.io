@@ -42,7 +42,7 @@ CATEGORIES = {
         "id": "compilers",
         "name": "Languages & Compilers",
         "icon": "⚡",
-        "desc": "Radical programming languages, prefix concatenative Lisps, transpilers, bytecode VMs, and zero-filler syntax experiments.",
+        "desc": "Radical programming languages, prefix concatenative Lisps, transpilers, bytecode VMs, and high-density syntax experiments.",
         "order": 1
     },
     "literate": {

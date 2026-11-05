@@ -15,7 +15,7 @@
       "id": "compilers",
       "name": "Languages & Compilers",
       "icon": "⚡",
-      "desc": "Radical programming languages, prefix concatenative Lisps, transpilers, bytecode VMs, and zero-filler syntax experiments.",
+      "desc": "Radical programming languages, prefix concatenative Lisps, transpilers, bytecode VMs, and lean syntax experiments.",
       "order": 1
     },
     "literate": {
@@ -68,7 +68,7 @@
       "isFork": false,
       "isArchived": false,
       "createdAt": "2026-11-05T09:32:24Z",
-      "updatedAt": "2026-11-05T10:06:26Z",
+      "updatedAt": "2026-11-05T10:51:47Z",
       "tags": [
         "C",
         "compiler"
@@ -154,7 +154,7 @@
       "tags": [
         "Dart"
       ],
-      "featured": false
+      "featured": true
     },
     {
       "name": "raptor",
@@ -194,7 +194,7 @@
       "tags": [
         "JavaScript"
       ],
-      "featured": false
+      "featured": true
     },
     {
       "name": "useless-box",
@@ -214,7 +214,7 @@
         "JavaScript",
         "graphics"
       ],
-      "featured": false
+      "featured": true
     },
     {
       "name": "enx",
@@ -252,7 +252,6 @@
       "updatedAt": "2026-10-26T05:48:10Z",
       "tags": [
         "Python",
-        "audio",
         "popular"
       ],
       "featured": true
@@ -330,7 +329,6 @@
       "updatedAt": "2026-10-09T22:57:44Z",
       "tags": [
         "JavaScript",
-        "audio",
         "popular"
       ],
       "featured": true
@@ -353,7 +351,7 @@
         "Python",
         "popular"
       ],
-      "featured": false
+      "featured": true
     },
     {
       "name": "ping-pong",
@@ -372,7 +370,7 @@
       "tags": [
         "HTML"
       ],
-      "featured": false
+      "featured": true
     },
     {
       "name": "sedit",
@@ -556,7 +554,7 @@
       "language": "Go",
       "stars": 0,
       "url": "https://github.com/xyzzyapps/arli",
-      "homepage": "https://xyzzyapps.github.io/arli/",
+      "homepage": "https://xyzzyapps.github.io/arli/tour/",
       "githubPage": "https://xyzzyapps.github.io/arli/",
       "hasGithubPage": true,
       "isFork": false,
@@ -688,7 +686,7 @@
         "simulation",
         "popular"
       ],
-      "featured": false
+      "featured": true
     },
     {
       "name": "fly-lab",
@@ -809,7 +807,7 @@
         "compiler",
         "popular"
       ],
-      "featured": false
+      "featured": true
     },
     {
       "name": "weft",
@@ -850,7 +848,7 @@
         "compiler",
         "popular"
       ],
-      "featured": false
+      "featured": true
     },
     {
       "name": "rift",
@@ -1226,7 +1224,7 @@
         "Go",
         "literate-code"
       ],
-      "featured": false
+      "featured": true
     },
     {
       "name": "kdl-lisp",
