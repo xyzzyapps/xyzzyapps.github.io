@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xyzzy Apps — Experimental Languages, Systems & Creative Tech</title>
+  <meta name="description" content="Portfolio of Xyzzy Apps: 77 open-source projects spanning novel programming languages, compilers, literate code, systems tooling, algorithmic audio, and simulations.">
+  <meta name="author" content="Xyzzy Apps">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://xyzzyapps.github.io/">
+  <meta property="og:title" content="Xyzzy Apps — Experimental Languages, Systems & Creative Tech">
+  <meta property="og:description" content="Explore 77 open-source projects: radical language designs, zero-filler automation, literate programming, algorithmic audio, and desktop simulations.">
+  <meta property="og:image" content="https://avatars.githubusercontent.com/u/89282585?v=4">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@xyzzyapps">
+  <meta name="twitter:creator" content="@xyzzyapps">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient background glow -->
+  <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+  <div class="ambient-glow glow-top-right" aria-hidden="true"></div>
+
+  <!-- Header / Navigation Bar -->
+  <header class="site-header">
+    <div class="container header-container">
+      <a href="#" class="brand">
+        <div class="brand-avatar-wrap">
+          <img src="https://avatars.githubusercontent.com/u/89282585?v=4" alt="Xyzzy Apps avatar" class="brand-avatar" width="40" height="40">
+          <span class="status-indicator" title="Active Hacker"></span>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">xyzzyapps</span>
+          <span class="brand-domain">.github.io</span>
+        </div>
+      </a>
+
+      <div class="header-actions">
+        <a href="https://github.com/xyzzyapps" target="_blank" rel="noopener noreferrer" class="btn-ghost" title="GitHub Profile">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span class="btn-text">GitHub</span>
+        </a>
+        <a href="https://xyzzyapps.link" target="_blank" rel="noopener noreferrer" class="btn-ghost" title="Official Blog">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+          <span class="btn-text">Blog</span>
+        </a>
+        <a href="https://twitter.com/xyzzyapps" target="_blank" rel="noopener noreferrer" class="btn-ghost" title="Twitter / X">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+          <span class="btn-text">X</span>
+        </a>
+        <button id="themeToggle" class="theme-btn" aria-label="Toggle color theme" title="Toggle theme">
+          <span class="theme-icon-dark">🌙</span>
+          <span class="theme-icon-light">☀️</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container hero-container">
+        <div class="hero-badge">
+          <span class="pulse-dot"></span>
+          <span>77 Experimental Repositories &middot; Open Source Lab</span>
+        </div>
+
+        <h1 class="hero-title">
+          Novel Languages, Zero-Filler Systems &amp; <span class="gradient-text">Generative Media</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Welcome to the software workshop of <strong>Xyzzy Apps</strong>. A comprehensive collection exploring
+          unconventional programming language designs, prefix concatenative Lisps, literate code engines,
+          low-level C/Assembly tools, DAW audio synthesizers, and eccentric desktop simulations.
+        </p>
+
+        <!-- Dynamic Stat Counters -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="statRepoCount">77</div>
+            <div class="stat-label">Total Repositories</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="statLangCount">12</div>
+            <div class="stat-label">Core Languages</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="statTrackCount">6</div>
+            <div class="stat-label">Research Tracks</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="statDemoCount">10+</div>
+            <div class="stat-label">Live Browser Demos</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Navigation / Filter Bar -->
+    <section class="controls-section" id="projects">
+      <div class="container">
+        <!-- Search and Global Controls Row -->
+        <div class="search-row">
+          <div class="search-input-wrap">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" placeholder="Search 77 projects by name, keyword, or concept (e.g. lisp, audio, c, shader)..." autocomplete="off" spellcheck="false">
+            <button id="clearSearchBtn" class="clear-btn" aria-label="Clear search" style="display: none;">&times;</button>
+          </div>
+
+          <div class="dropdown-controls">
+            <!-- Language Filter Dropdown -->
+            <div class="select-wrap">
+              <label for="languageSelect" class="visually-hidden">Filter by Language</label>
+              <select id="languageSelect">
+                <option value="all">All Languages</option>
+                <option value="Go">Go (32)</option>
+                <option value="Python">Python (13)</option>
+                <option value="C">C (11)</option>
+                <option value="JavaScript">JavaScript (8)</option>
+                <option value="TypeScript">TypeScript (3)</option>
+                <option value="Rust">Rust (2)</option>
+                <option value="C++">C++ (2)</option>
+                <option value="Assembly">Assembly (1)</option>
+                <option value="Dart">Dart (1)</option>
+                <option value="Perl">Perl (1)</option>
+                <option value="Shell">Shell (1)</option>
+                <option value="HTML">HTML (2)</option>
+              </select>
+            </div>
+
+            <!-- Sort By Dropdown -->
+            <div class="select-wrap">
+              <label for="sortSelect" class="visually-hidden">Sort Projects</label>
+              <select id="sortSelect">
+                <option value="featured">Featured First</option>
+                <option value="stars">Stars (High to Low)</option>
+                <option value="recent">Recently Updated</option>
+                <option value="name">Name (A &rarr; Z)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="category-tabs" id="categoryTabs" role="tablist">
+          <button class="cat-tab active" data-category="all" role="tab" aria-selected="true">
+            <span class="cat-icon">✦</span>
+            <span class="cat-name">All Projects</span>
+            <span class="cat-count" id="countAll">77</span>
+          </button>
+          <button class="cat-tab" data-category="featured" role="tab" aria-selected="false">
+            <span class="cat-icon">⭐</span>
+            <span class="cat-name">Featured</span>
+            <span class="cat-count" id="countFeatured">12</span>
+          </button>
+          <button class="cat-tab" data-category="compilers" role="tab" aria-selected="false">
+            <span class="cat-icon">⚡</span>
+            <span class="cat-name">Languages &amp; Compilers</span>
+            <span class="cat-count" id="countCompilers">24</span>
+          </button>
+          <button class="cat-tab" data-category="literate" role="tab" aria-selected="false">
+            <span class="cat-icon">📖</span>
+            <span class="cat-name">Literate &amp; Prose</span>
+            <span class="cat-count" id="countLiterate">10</span>
+          </button>
+          <button class="cat-tab" data-category="systems" role="tab" aria-selected="false">
+            <span class="cat-icon">🛠️</span>
+            <span class="cat-name">Systems &amp; DevTools</span>
+            <span class="cat-count" id="countSystems">20</span>
+          </button>
+          <button class="cat-tab" data-category="audio_video" role="tab" aria-selected="false">
+            <span class="cat-icon">🎵</span>
+            <span class="cat-name">Audio &amp; Creative Tech</span>
+            <span class="cat-count" id="countAudio">8</span>
+          </button>
+          <button class="cat-tab" data-category="sim_games" role="tab" aria-selected="false">
+            <span class="cat-icon">🕹️</span>
+            <span class="cat-name">Simulations &amp; Games</span>
+            <span class="cat-count" id="countGames">10</span>
+          </button>
+          <button class="cat-tab" data-category="web_runtime" role="tab" aria-selected="false">
+            <span class="cat-icon">🌐</span>
+            <span class="cat-name">Web &amp; Runtimes</span>
+            <span class="cat-count" id="countWeb">5</span>
+          </button>
+          <button class="cat-tab" data-category="demos" role="tab" aria-selected="false">
+            <span class="cat-icon">🚀</span>
+            <span class="cat-name">Live Demos</span>
+            <span class="cat-count" id="countDemos">10</span>
+          </button>
+        </div>
+
+        <!-- Filter Status Bar -->
+        <div class="filter-status-bar" id="filterStatusBar">
+          <div class="result-count">
+            Showing <strong id="visibleCount">77</strong> of 77 projects
+          </div>
+          <div class="active-filter-tags" id="activeFilterTags"></div>
+          <button id="resetFiltersBtn" class="btn-text-only" style="display: none;">Reset Filters</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Cards Grid -->
+    <section class="projects-section">
+      <div class="container">
+        <div class="projects-grid" id="projectsGrid">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <div class="empty-icon">🔍</div>
+          <h3>No matching projects found</h3>
+          <p>Try refining your search terms or clearing the selected filters.</p>
+          <button class="btn-primary" onclick="window.resetAllFilters()">View All Projects</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Curated Deep Dive / Taxonomy Overview -->
+    <section class="taxonomy-section">
+      <div class="container">
+        <div class="section-heading">
+          <span class="section-tag">ARCHITECTURAL TAXONOMY</span>
+          <h2>The Xyzzy Apps Ecosystem</h2>
+          <p>Explore the recurring paradigms and foundational ideas connecting these projects.</p>
+        </div>
+
+        <div class="taxonomy-grid">
+          <div class="taxonomy-card" onclick="window.setCategoryFilter('compilers')">
+            <div class="taxonomy-icon">⚡</div>
+            <h3>Radical Programming Languages</h3>
+            <p>From English-automation shells (<strong>otto</strong>) to pure Smalltalk message passing combined with Tcl tokens (<strong>tick</strong>), prefix concatenative Lisps (<strong>preforth</strong>), and Julia-style multiple dispatch in C (<strong>mc</strong>).</p>
+            <div class="taxonomy-footer">
+              <span class="taxonomy-link">Explore 24 Language Projects &rarr;</span>
+            </div>
+          </div>
+
+          <div class="taxonomy-card" onclick="window.setCategoryFilter('literate')">
+            <div class="taxonomy-icon">📖</div>
+            <h3>Literate &amp; Conversational Code</h3>
+            <p>Code that explains itself before it compiles. Noweb wrappers for Markdown (<strong>goweb</strong>, <strong>fragment</strong>), topological explain-order compilation (<strong>weft</strong>), and two-way C to English translation (<strong>c2eng</strong>).</p>
+            <div class="taxonomy-footer">
+              <span class="taxonomy-link">Explore 10 Literate Projects &rarr;</span>
+            </div>
+          </div>
+
+          <div class="taxonomy-card" onclick="window.setCategoryFilter('systems')">
+            <div class="taxonomy-icon">🛠️</div>
+            <h3>Low-Level &amp; Unconventional Tooling</h3>
+            <p>Human-readable assembly macros (<strong>rasm</strong>, 12★), hygienic C token macro expanders (<strong>cppp</strong>), key-value version control (<strong>flatvc</strong>), and editors where sprites delete code with shotguns (<strong>duke</strong>).</p>
+            <div class="taxonomy-footer">
+              <span class="taxonomy-link">Explore 20 Systems Projects &rarr;</span>
+            </div>
+          </div>
+
+          <div class="taxonomy-card" onclick="window.setCategoryFilter('audio_video')">
+            <div class="taxonomy-icon">🎵</div>
+            <h3>Generative Audio &amp; Creative Media</h3>
+            <p>Pure FFmpeg-synthesized hardgroove techno (<strong>fftechno</strong>), real-time guitar-to-drum MIDI inference engines for DAWs (<strong>Jbd</strong>, 9★), headless Pure Data DSP (<strong>pdp</strong>), and browser dub techno (<strong>endless_dub</strong>).</p>
+            <div class="taxonomy-footer">
+              <span class="taxonomy-link">Explore 8 Audio/Media Projects &rarr;</span>
+            </div>
+          </div>
+
+          <div class="taxonomy-card" onclick="window.setCategoryFilter('sim_games')">
+            <div class="taxonomy-icon">🕹️</div>
+            <h3>Biological Simulation &amp; Micro-Worlds</h3>
+            <p>Live-patchable desktop arthropods (<strong>tangly</strong>), desktop fruit flies (<strong>holmsy</strong>), fly mushroom-body RL agents composing haiku (<strong>faiku</strong>), and Ghibli-shaded 3D meadows (<strong>doge-world</strong>).</p>
+            <div class="taxonomy-footer">
+              <span class="taxonomy-link">Explore 10 Simulation Projects &rarr;</span>
+            </div>
+          </div>
+
+          <div class="taxonomy-card" onclick="window.setCategoryFilter('web_runtime')">
+            <div class="taxonomy-icon">🌐</div>
+            <h3>Novel Runtimes &amp; Web Architectures</h3>
+            <p>Go executing with PHP-style drop-in file templating and compile-on-request (<strong>gohp</strong>), pure ES Modules Single File Component engines (<strong>diver</strong>), and Bubble Tea TUI on Android (<strong>cha-yen</strong>).</p>
+            <div class="taxonomy-footer">
+              <span class="taxonomy-link">Explore 5 Runtime Projects &rarr;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Project Detail Modal -->
+  <div class="modal-backdrop" id="projectModal" aria-hidden="true">
+    <div class="modal-window" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">&times;</button>
+      <div class="modal-body" id="modalBody">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast-icon">📋</span>
+    <span class="toast-message" id="toastMessage">Copied to clipboard</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-left">
+        <div class="footer-brand">xyzzyapps.github.io</div>
+        <p class="footer-tagline">Engineered with curiosity, zero filler, and expressive code.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://github.com/xyzzyapps" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://xyzzyapps.link" target="_blank" rel="noopener noreferrer">Blog</a>
+        <a href="https://twitter.com/xyzzyapps" target="_blank" rel="noopener noreferrer">Twitter/X</a>
+        <a href="#projects">Back to Top &uarr;</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Embedded Project Data & Client Engine -->
+  <script src="projects.json" type="application/json" id="rawProjectData"></script>
+  <script src="app.js"></script>
+</body>
+</html>

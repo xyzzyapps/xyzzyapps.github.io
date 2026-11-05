@@ -1,0 +1,6 @@
+# Temporary build / scrapers
+repos.json
+analyze.py
+site_data.json
+.DS_Store
+Thumbs.db
