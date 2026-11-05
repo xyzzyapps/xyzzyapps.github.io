@@ -6,8 +6,9 @@ with open('projects.json', 'r', encoding='utf-8') as f:
 json_str = json.dumps(site_data, ensure_ascii=False)
 
 js_content = f"""/**
- * Xyzzy Apps — Client Application Engine
- * Grouped category layout, instant search, language filter, GitHub Pages direct launcher.
+ * Xyzzy Apps — Slop-Free Technical Registry Engine
+ * High-density, brutalist developer index with instant search, category grouping,
+ * and direct GitHub Pages launchers.
  */
 
 // Embedded dataset fallback
@@ -22,22 +23,6 @@ let state = {{
   viewMode: 'grouped', // 'grouped' (default) or 'flat'
   onlyPages: false,
   selectedProject: null
-}};
-
-// Language color mapping
-const LANG_CLASS_MAP = {{
-  'Go': 'lang-Go',
-  'Python': 'lang-Python',
-  'C': 'lang-C',
-  'JavaScript': 'lang-JavaScript',
-  'TypeScript': 'lang-TypeScript',
-  'Rust': 'lang-Rust',
-  'Assembly': 'lang-Assembly',
-  'C++': 'lang-Cpp',
-  'Dart': 'lang-Dart',
-  'Perl': 'lang-Perl',
-  'Shell': 'lang-Shell',
-  'HTML': 'lang-HTML'
 }};
 
 document.addEventListener('DOMContentLoaded', () => {{
@@ -70,7 +55,7 @@ async function loadDataAndRender() {{
       }}
     }}
   }} catch (e) {{
-    console.warn('Using embedded dataset fallback:', e);
+    console.warn('Fallback to embedded dataset:', e);
   }}
 
   parseUrlParams();
@@ -92,6 +77,7 @@ function parseUrlParams() {{
 
   if (params.has('pages') && params.get('pages') === '1') {{
     state.onlyPages = true;
+    state.category = 'pages';
   }}
 
   if (params.has('view')) {{
@@ -114,7 +100,7 @@ function parseUrlParams() {{
 }}
 
 function updateTabUi() {{
-  const tabs = document.querySelectorAll('.cat-tab');
+  const tabs = document.querySelectorAll('.tab-btn');
   tabs.forEach(tab => {{
     if (tab.dataset.category === state.category) {{
       tab.classList.add('active');
@@ -125,7 +111,6 @@ function updateTabUi() {{
     }}
   }});
 
-  // Update view mode toggle buttons if any
   const viewGroupedBtn = document.getElementById('viewModeGrouped');
   const viewFlatBtn = document.getElementById('viewModeFlat');
   if (viewGroupedBtn && viewFlatBtn) {{
@@ -165,17 +150,13 @@ function initEventListeners() {{
   const catTabs = document.getElementById('categoryTabs');
   if (catTabs) {{
     catTabs.addEventListener('click', (e) => {{
-      const tab = e.target.closest('.cat-tab');
+      const tab = e.target.closest('.tab-btn');
       if (!tab) return;
       const cat = tab.dataset.category;
       
       if (cat === 'pages') {{
         state.onlyPages = !state.onlyPages;
-        if (state.onlyPages) {{
-          state.category = 'pages';
-        }} else {{
-          state.category = 'all';
-        }}
+        state.category = state.onlyPages ? 'pages' : 'all';
       }} else {{
         state.onlyPages = false;
         state.category = cat;
@@ -273,7 +254,7 @@ function updateCategoryCounts() {{
   setIfExists('countWeb', counts.web_runtime);
   setIfExists('countPages', counts.pages);
 
-  // Top stat counters
+  // Top metric counters
   setIfExists('statRepoCount', repos.length);
   const uniqueLangs = new Set(repos.map(r => r.language).filter(Boolean));
   setIfExists('statLangCount', uniqueLangs.size);
@@ -317,7 +298,7 @@ function getFilteredRepos() {{
   }} else if (state.sortBy === 'name') {{
     repos.sort((a, b) => a.name.localeCompare(b.name));
   }} else {{
-    // Featured & Pages first, then stars
+    // Pages & Featured first, then stars
     repos.sort((a, b) => {{
       if (a.hasGithubPage && !b.hasGithubPage) return -1;
       if (!a.hasGithubPage && b.hasGithubPage) return 1;
@@ -346,7 +327,7 @@ function render() {{
 
   const hasActiveFilters = state.category !== 'all' || state.language !== 'all' || state.searchQuery.length > 0 || state.onlyPages;
   if (resetBtn) {{
-    resetBtn.style.display = hasActiveFilters ? 'inline-block' : 'none';
+    resetBtn.style.display = hasActiveFilters ? 'inline' : 'none';
   }}
 
   if (filtered.length === 0) {{
@@ -361,7 +342,6 @@ function render() {{
   if (state.viewMode === 'grouped' && state.category === 'all' && !state.onlyPages) {{
     renderGroupedCategories(container, filtered);
   }} else {{
-    // Flat Grid Mode (or when a specific single category/pages is filtered)
     renderFlatGrid(container, filtered);
   }}
 }}
@@ -379,20 +359,19 @@ function renderGroupedCategories(container, repos) {{
     if (catRepos.length === 0) continue;
 
     const pagesInCat = catRepos.filter(r => r.hasGithubPage).length;
+    const numPrefix = String(cat.order || '0').padStart(2, '0');
 
     html += `
       <section class="category-block" id="category-${{catKey}}">
-        <div class="category-block-header">
-          <div class="cat-header-left">
-            <span class="category-block-icon">${{cat.icon}}</span>
-            <div>
-              <h2 class="category-block-title">${{escapeHtml(cat.name)}}</h2>
-              <p class="category-block-desc">${{escapeHtml(cat.desc)}}</p>
-            </div>
+        <div class="category-header">
+          <div class="category-title-wrap">
+            <span class="category-num">// [${{numPrefix}}]</span>
+            <h2 class="category-title">${{escapeHtml(cat.name)}}</h2>
+            <div class="category-desc">${{escapeHtml(cat.desc)}}</div>
           </div>
-          <div class="cat-header-badges">
-            <span class="cat-total-badge">${{catRepos.length}} Projects</span>
-            ${{pagesInCat > 0 ? `<span class="cat-pages-badge">🌐 ${{pagesInCat}} GitHub ${{pagesInCat === 1 ? 'Page' : 'Pages'}}</span>` : ''}}
+          <div class="category-counts">
+            <span class="count-pill">[${{catRepos.length}} ENTRIES]</span>
+            ${{pagesInCat > 0 ? `<span class="count-pill pages">[● ${{pagesInCat}} LIVE PAGES]</span>` : ''}}
           </div>
         </div>
 
@@ -407,33 +386,27 @@ function renderGroupedCategories(container, repos) {{
 }}
 
 function renderFlatGrid(container, repos) {{
-  let headerHtml = '';
+  let bannerHtml = '';
   
   if (state.category === 'pages' || state.onlyPages) {{
-    headerHtml = `
-      <div class="flat-header-banner">
-        <span class="banner-icon">🌐</span>
-        <div>
-          <h3>Repositories with Live GitHub Pages</h3>
-          <p>Directly explore interactive web demos, compiler playgrounds, and online documentation hosted at xyzzyapps.github.io</p>
-        </div>
+    bannerHtml = `
+      <div class="flat-banner">
+        <h3>// FILTER: REPOSITORIES WITH HOSTED GITHUB PAGES</h3>
+        <p>Displaying 14 projects with live browser web applications, compilers, and documentation hosted at xyzzyapps.github.io</p>
       </div>
     `;
   }} else if (state.category !== 'all' && state.data.categories[state.category]) {{
     const cat = state.data.categories[state.category];
-    headerHtml = `
-      <div class="flat-header-banner">
-        <span class="banner-icon">${{cat.icon}}</span>
-        <div>
-          <h3>${{escapeHtml(cat.name)}}</h3>
-          <p>${{escapeHtml(cat.desc)}}</p>
-        </div>
+    bannerHtml = `
+      <div class="flat-banner">
+        <h3>// FILTER: ${{escapeHtml(cat.name).toUpperCase()}}</h3>
+        <p>${{escapeHtml(cat.desc)}}</p>
       </div>
     `;
   }}
 
   container.innerHTML = `
-    ${{headerHtml}}
+    ${{bannerHtml}}
     <div class="projects-grid">
       ${{repos.map(repo => createCardHtml(repo)).join('')}}
     </div>
@@ -451,82 +424,65 @@ function escapeHtml(str) {{
 }}
 
 function createCardHtml(repo) {{
-  const langClass = LANG_CLASS_MAP[repo.language] || 'lang-Other';
   const hasPage = Boolean(repo.hasGithubPage && repo.githubPage);
-  const featuredBadge = repo.featured ? '<span class="badge-featured">⭐ Spotlight</span>' : '';
-  const starBadge = repo.stars > 0 ? `<span class="star-badge">★ ${{repo.stars}}</span>` : '';
+  const spotlightBadge = repo.featured ? '<span class="spotlight-pill">SPOTLIGHT</span>' : '';
+  const starBadge = repo.stars > 0 ? `<span class="star-count">★${{repo.stars}}</span>` : '';
   const pageBadge = hasPage ? `
-    <a href="${{escapeHtml(repo.githubPage)}}" target="_blank" rel="noopener noreferrer" class="badge-github-page" title="Open live GitHub Page at ${{escapeHtml(repo.githubPage)}}">
-      <span class="live-dot"></span>
-      <span>GitHub Page</span>
+    <a href="${{escapeHtml(repo.githubPage)}}" target="_blank" rel="noopener noreferrer" class="page-badge-link" title="Open hosted GitHub Page">
+      LIVE PAGE ↗
     </a>
   ` : '';
 
   const tagsHtml = (repo.tags || []).map(t => 
-    `<span class="tag-pill" onclick="window.filterByTag('${{escapeHtml(t)}}')">${{escapeHtml(t)}}</span>`
+    `<span class="tag-code" onclick="window.filterByTag('${{escapeHtml(t)}}')">${{escapeHtml(t)}}</span>`
   ).join('');
 
   const cloneCmd = `git clone ${{repo.url}}.git`;
 
   return `
-    <article class="project-card ${{repo.featured ? 'is-featured' : ''}} ${{hasPage ? 'has-page-card' : ''}}" data-name="${{escapeHtml(repo.name)}}">
-      <div class="card-top-row">
-        <div class="card-title-group">
-          <h3 class="project-title">
+    <article class="project-card ${{hasPage ? 'has-page' : ''}}" data-name="${{escapeHtml(repo.name)}}">
+      <div class="card-header-line">
+        <div class="project-name-group">
+          <span class="project-name">
             <a href="${{escapeHtml(repo.url)}}" target="_blank" rel="noopener noreferrer">${{escapeHtml(repo.name)}}</a>
-          </h3>
-          ${{featuredBadge}}
+          </span>
           ${{pageBadge}}
+          ${{spotlightBadge}}
         </div>
-        <div class="card-stats">
-          <div class="lang-badge">
-            <span class="lang-dot ${{langClass}}"></span>
-            <span>${{escapeHtml(repo.language)}}</span>
-          </div>
+        <div class="card-meta-line">
+          <span class="lang-tag">${{escapeHtml(repo.language)}}</span>
           ${{starBadge}}
         </div>
       </div>
 
-      <p class="project-description">${{escapeHtml(repo.description)}}</p>
+      <p class="project-desc">${{escapeHtml(repo.description)}}</p>
 
       <div class="project-tags">${{tagsHtml}}</div>
 
-      <div class="card-actions">
+      <div class="card-actions-strip">
         ${{hasPage ? `
-          <a href="${{escapeHtml(repo.githubPage)}}" target="_blank" rel="noopener noreferrer" class="btn-card btn-pages-glow">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
-            <span>GitHub Page &rarr;</span>
+          <a href="${{escapeHtml(repo.githubPage)}}" target="_blank" rel="noopener noreferrer" class="action-link-page">
+            [OPEN PAGE ↗]
           </a>
         ` : repo.homepage ? `
-          <a href="${{escapeHtml(repo.homepage)}}" target="_blank" rel="noopener noreferrer" class="btn-card btn-pages-glow">
-            <span>🚀 Live Demo</span>
+          <a href="${{escapeHtml(repo.homepage)}}" target="_blank" rel="noopener noreferrer" class="action-link-page">
+            [LIVE DEMO ↗]
           </a>
         ` : ''}}
-        <a href="${{escapeHtml(repo.url)}}" target="_blank" rel="noopener noreferrer" class="btn-card btn-secondary" title="View Source on GitHub">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
-          <span>Source</span>
+        <a href="${{escapeHtml(repo.url)}}" target="_blank" rel="noopener noreferrer" class="action-link">
+          [CODE]
         </a>
-        <button class="btn-card btn-secondary" onclick="window.openDetailModal('${{escapeHtml(repo.name)}}')" title="Inspect details">
-          <span>Details</span>
+        <button class="action-link" onclick="window.openDetailModal('${{escapeHtml(repo.name)}}')">
+          [DETAILS]
         </button>
-        <button class="btn-icon-only" onclick="window.copyToClipboard('${{cloneCmd}}', 'Clone command copied!')" title="Copy git clone command">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
+        <button class="action-btn-copy" onclick="window.copyToClipboard('${{cloneCmd}}')">
+          [CLONE]
         </button>
       </div>
     </article>
   `;
 }}
 
-// Global Actions & Modal
 window.filterByTag = function(tag) {{
   const searchInput = document.getElementById('searchInput');
   const clearBtn = document.getElementById('clearSearchBtn');
@@ -535,37 +491,18 @@ window.filterByTag = function(tag) {{
     state.searchQuery = tag.toLowerCase();
     if (clearBtn) clearBtn.style.display = 'block';
     render();
-    const projectsSection = document.getElementById('projects');
-    if (projectsSection) {{
-      projectsSection.scrollIntoView({{ behavior: 'smooth' }});
-    }}
+    const controls = document.getElementById('controls');
+    if (controls) controls.scrollIntoView({{ behavior: 'smooth' }});
   }}
-}};
-
-window.jumpToCategory = function(catKey) {{
-  state.category = 'all';
-  state.onlyPages = false;
-  state.viewMode = 'grouped';
-  updateTabUi();
-  render();
-  
-  setTimeout(() => {{
-    const el = document.getElementById('category-' + catKey);
-    if (el) {{
-      el.scrollIntoView({{ behavior: 'smooth', block: 'start' }});
-    }}
-  }}, 50);
 }};
 
 window.setCategoryFilter = function(cat) {{
   state.category = cat;
-  state.onlyPages = false;
+  state.onlyPages = (cat === 'pages');
   updateTabUi();
   render();
-  const projectsSection = document.getElementById('projects');
-  if (projectsSection) {{
-    projectsSection.scrollIntoView({{ behavior: 'smooth' }});
-  }}
+  const controls = document.getElementById('controls');
+  if (controls) controls.scrollIntoView({{ behavior: 'smooth' }});
 }};
 
 window.resetAllFilters = function() {{
@@ -600,61 +537,64 @@ window.openDetailModal = function(name) {{
   if (!modal || !modalBody) return;
 
   const cloneCmd = `git clone ${{repo.url}}.git`;
-  const created = repo.createdAt ? new Date(repo.createdAt).toLocaleDateString() : 'N/A';
-  const updated = repo.updatedAt ? new Date(repo.updatedAt).toLocaleDateString() : 'N/A';
+  const created = repo.createdAt ? repo.createdAt.substring(0, 10) : 'N/A';
+  const updated = repo.updatedAt ? repo.updatedAt.substring(0, 10) : 'N/A';
   const hasPage = Boolean(repo.hasGithubPage && repo.githubPage);
 
   modalBody.innerHTML = `
-    <div class="modal-header-top">
-      <h2 class="modal-title" id="modalTitle">${{escapeHtml(repo.name)}}</h2>
-      ${{repo.featured ? '<span class="badge-featured">⭐ Spotlight</span>' : ''}}
-      ${{hasPage ? `<a href="${{escapeHtml(repo.githubPage)}}" target="_blank" rel="noopener noreferrer" class="badge-github-page"><span class="live-dot"></span> GitHub Page</a>` : ''}}
-      ${{repo.stars > 0 ? `<span class="star-badge">★ ${{repo.stars}}</span>` : ''}}
-    </div>
-    
-    <div class="lang-badge" style="margin-bottom: 1rem;">
-      <span class="lang-dot ${{LANG_CLASS_MAP[repo.language] || 'lang-Other'}}"></span>
-      <strong>Primary Language:</strong> ${{escapeHtml(repo.language)}}
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <span class="modal-repo-name">${{escapeHtml(repo.name)}}</span>
+        ${{hasPage ? `<a href="${{escapeHtml(repo.githubPage)}}" target="_blank" rel="noopener noreferrer" class="page-badge-link">LIVE PAGE ↗</a>` : ''}}
+        ${{repo.stars > 0 ? `<span class="star-count">★${{repo.stars}}</span>` : ''}}
+      </div>
+      <div style="font-size: 0.8rem; color: var(--text-dim);">
+        LANGUAGE: ${{escapeHtml(repo.language).toUpperCase()}} // CATEGORY: ${{escapeHtml((state.data.categories[repo.category] || {{}}).name || repo.category).toUpperCase()}}
+      </div>
     </div>
 
     <p class="modal-desc">${{escapeHtml(repo.description)}}</p>
 
-    <div class="modal-code-snippet">
+    <div class="modal-code-box">
       <code>${{escapeHtml(cloneCmd)}}</code>
-      <button class="snippet-copy-btn" onclick="window.copyToClipboard('${{cloneCmd}}', 'Command copied!')">Copy</button>
+      <button class="modal-copy-btn" onclick="window.copyToClipboard('${{cloneCmd}}')">[COPY]</button>
     </div>
 
-    <div class="modal-meta-grid">
-      <div class="modal-meta-item">
-        <strong>Category</strong>
-        ${{escapeHtml((state.data.categories[repo.category] || {{}}).name || repo.category)}}
+    <div class="modal-details-grid">
+      <div class="modal-detail-item">
+        <span class="modal-detail-lbl">GitHub Pages URL</span>
+        <span class="modal-detail-val">
+          ${{hasPage ? `<a href="${{escapeHtml(repo.githubPage)}}" target="_blank" rel="noopener noreferrer" style="color: var(--accent-green); text-decoration: underline;">${{escapeHtml(repo.githubPage)}}</a>` : 'NOT CONFIGURED'}}
+        </span>
       </div>
-      <div class="modal-meta-item">
-        <strong>GitHub Page Status</strong>
-        ${{hasPage ? `<a href="${{escapeHtml(repo.githubPage)}}" target="_blank" rel="noopener noreferrer" style="color: var(--accent-emerald); font-weight: 600; text-decoration: underline;">Available &rarr; View Live</a>` : 'Source Only'}}
+      <div class="modal-detail-item">
+        <span class="modal-detail-lbl">Repository</span>
+        <span class="modal-detail-val">
+          <a href="${{escapeHtml(repo.url)}}" target="_blank" rel="noopener noreferrer" style="color: var(--text); text-decoration: underline;">${{escapeHtml(repo.url)}}</a>
+        </span>
       </div>
-      <div class="modal-meta-item">
-        <strong>Repository URL</strong>
-        <a href="${{escapeHtml(repo.url)}}" target="_blank" rel="noopener noreferrer" style="color: var(--accent-cyan); text-decoration: underline;">GitHub Repository</a>
+      <div class="modal-detail-item">
+        <span class="modal-detail-lbl">Created</span>
+        <span class="modal-detail-val">${{escapeHtml(created)}}</span>
       </div>
-      <div class="modal-meta-item">
-        <strong>Last Updated</strong>
-        ${{escapeHtml(updated)}}
+      <div class="modal-detail-item">
+        <span class="modal-detail-lbl">Last Pushed</span>
+        <span class="modal-detail-val">${{escapeHtml(updated)}}</span>
       </div>
     </div>
 
-    <div class="modal-actions">
+    <div class="modal-btn-row">
       ${{hasPage ? `
-        <a href="${{escapeHtml(repo.githubPage)}}" target="_blank" rel="noopener noreferrer" class="btn-card btn-pages-glow" style="padding: 0.65rem 1.25rem; font-size: 0.95rem;">
-          🌐 Launch GitHub Page (${{escapeHtml(repo.name)}}) &rarr;
+        <a href="${{escapeHtml(repo.githubPage)}}" target="_blank" rel="noopener noreferrer" class="btn-primary-action">
+          [LAUNCH GITHUB PAGE ↗]
         </a>
       ` : repo.homepage ? `
-        <a href="${{escapeHtml(repo.homepage)}}" target="_blank" rel="noopener noreferrer" class="btn-card btn-pages-glow" style="padding: 0.65rem 1.25rem; font-size: 0.95rem;">
-          🚀 Open Live Demo &rarr;
+        <a href="${{escapeHtml(repo.homepage)}}" target="_blank" rel="noopener noreferrer" class="btn-primary-action">
+          [OPEN LIVE DEMO ↗]
         </a>
       ` : ''}}
-      <a href="${{escapeHtml(repo.url)}}" target="_blank" rel="noopener noreferrer" class="btn-card btn-secondary" style="padding: 0.65rem 1.25rem; font-size: 0.95rem;">
-        View on GitHub &rarr;
+      <a href="${{escapeHtml(repo.url)}}" target="_blank" rel="noopener noreferrer" class="btn-secondary-action">
+        [VIEW REPO ON GITHUB ↗]
       </a>
     </div>
   `;
@@ -673,9 +613,9 @@ function closeModal() {{
   document.body.style.overflow = '';
 }}
 
-window.copyToClipboard = function(text, toastMsg = 'Copied to clipboard!') {{
+window.copyToClipboard = function(text) {{
   navigator.clipboard.writeText(text).then(() => {{
-    showToast(toastMsg);
+    showToast();
   }}).catch(() => {{
     const textarea = document.createElement('textarea');
     textarea.value = text;
@@ -683,25 +623,22 @@ window.copyToClipboard = function(text, toastMsg = 'Copied to clipboard!') {{
     textarea.select();
     document.execCommand('copy');
     document.body.removeChild(textarea);
-    showToast(toastMsg);
+    showToast();
   }});
 }};
 
-function showToast(msg) {{
+function showToast() {{
   const toast = document.getElementById('toast');
-  const toastMessage = document.getElementById('toastMessage');
-  if (!toast || !toastMessage) return;
+  if (!toast) return;
 
-  toastMessage.textContent = msg;
   toast.classList.add('is-visible');
-
   setTimeout(() => {{
     toast.classList.remove('is-visible');
-  }}, 2500);
+  }}, 2000);
 }}
 """
 
 with open('app.js', 'w', encoding='utf-8') as f:
     f.write(js_content)
 
-print("Regenerated app.js with category-grouped rendering and GitHub Pages launcher!")
+print("Generated slop-free app.js successfully!")
